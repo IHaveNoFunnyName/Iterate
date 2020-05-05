@@ -7,27 +7,34 @@ Display.fullrender = 0;
 
 Iterate.number = 1;
 Iterate.nps = 1;
-Iterate.loopsps = 10;
+Iterate.loopsps = 1;
 Iterate.shop = [{},{}];
 
-	Iterate.shop[0].text = "<button onclick=\"Iterate.buy1()\">Iterated counting</button> Add 1 to how many number you gain per second";
+	Iterate.shop[0].text = "<button onclick=\"Iterate.buy1()\">Iterated counting</button> Increase the ammount of times you count every second, or, addition.";
 	Iterate.shop[0].ammount = 1;
 	
-	Iterate.shop[1].text = "<button onclick=\"Iterate.buy2()\">Iterated addition</button> Increase the multiplier to your number per second by 1"
+	Iterate.shop[1].text = "<button onclick=\"Iterate.buy2()\">Iterated addition</button> Increase the ammount of times you add sucessivly, or, multiplication."
 	Iterate.shop[1].ammount = 1;
 	
 Iterate.buy1 = function() {
 	
-	Display.fullrender = 1;
-	
 	Iterate.shop[0].ammount += 1;
+	
+	Iterate.calcnps();
+	
+	Display.rendernumber();
+	Display.render();
+	
 }
 
 Iterate.buy2 = function() {
 	
-	Display.fullrender = 1;
-	
 	Iterate.shop[1].ammount += 1;
+	
+	Iterate.calcnps();
+	
+	Display.rendernumber()
+	Display.render();
 }
 
 //Mechanics
@@ -47,14 +54,18 @@ Iterate.loop = function() {
 		Display.fullrender = 1;
 	}
 	
-	Iterate.nps = 1 * Iterate.shop[0].ammount;
-	Iterate.nps = Iterate.nps * Iterate.shop[1].ammount;
-	
 	Display.rendernumber();
 	
 	if (Display.fullrender == 1) {
 		Display.render();
 	}
+}
+
+Iterate.calcnps = function() {
+	
+	Iterate.nps = 1 * Iterate.shop[0].ammount;
+	Iterate.nps = Iterate.nps * Iterate.shop[1].ammount;
+	
 }
 
 //Display
@@ -133,10 +144,13 @@ Display.render = function() {
 		
 		if (Iterate.shop[1].ammount > 1) {
 			string += "<br>Or,   " + Iterate.shop[0].ammount;
-			for (i=1;i<Iterate.shop[1].ammount;i++){
-				string += " + " + Iterate.shop[0].ammount;
+			if (Iterate.shop[1].ammount < 20) {
+				for (i=1;i<Iterate.shop[1].ammount;i++){
+					string += " + " + Iterate.shop[0].ammount;
+				}
+			} else {
+				string += " * " + Iterate.shop[1].ammount;
 			}
-			Iterate.shop[0].ammount;
 		}
 		
 		disformula.innerHTML = string;
